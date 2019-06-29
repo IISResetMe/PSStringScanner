@@ -41,13 +41,13 @@ class PSStringScanner : ICloneable {
         return $null
     }
 
-    [bool]Check($value) {
+    [bool]Check([string]$value) {
         $result = $this.MatchResult($value)
 
         return $result.success
     }
 
-    [object]Skip($value) {
+    [object]Skip([string]$value) {
         $result = $this.MatchResult($value)
         if ($result.success) {
             $this.pos = $result.Index + $result.Length
@@ -60,7 +60,7 @@ class PSStringScanner : ICloneable {
     <#
         It "checks" to see whether a scan_until will return a value
     #>
-    [object]CheckUntil($value) {
+    [object]CheckUntil([string]$value) {
         $result = $this.MatchResult($value)
         if ($result.Success) {
             return $result.Value
@@ -90,7 +90,7 @@ class PSStringScanner : ICloneable {
     <#
         Scans the string until the pattern is matched. Returns the substring up to and including the end of the match, advancing the scan pointer to that location. If there is no match, null is returned
     #>
-    [object]ScanUntil($value) {
+    [object]ScanUntil([string]$value) {
         $result = $this.MatchResult($value)
 
         if ($result.Success) {
@@ -124,7 +124,7 @@ class PSStringScanner : ICloneable {
           $s.peek(7)          # => "test st"
           $s.peek(7)          # => "test st"
     #>
-    [object]Peek($length) {
+    [object]Peek([int]$length) {
         if ($length + $this.pos -gt $this.s.length) {
             $length = $this.s.length - $this.pos
         }
@@ -205,20 +205,20 @@ function New-PSStringScanner {
     [OutputType([PSStringScanner])]
     param(
         [Parameter(Mandatory)]
-        $text
+        [string]$Text
     )
 
-    [PSStringScanner]::new($text)
+    [PSStringScanner]::new($Text)
 }
 
 function New-PSStringScannerEx {
     [OutputType([PSStringScannerEx])]
     param(
         [Parameter(Mandatory)]
-        $text
+        [string]$Text
     )
 
-    [PSStringScannerEx]::new($text)
+    [PSStringScannerEx]::new($Text)
 }
 
 Update-TypeData -Force -TypeName String -MemberType ScriptMethod -MemberName Scan -Value {
